@@ -3,26 +3,48 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.30114.105
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Synnotech.EntityFrameworkCore", "Synnotech.EntityFrameworkCore\Synnotech.EntityFrameworkCore.csproj", "{88B7D311-FAB9-4532-BB5C-14A7C9610124}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Synnotech.EntityFrameworkCore", "src\Synnotech.EntityFrameworkCore\Synnotech.EntityFrameworkCore.csproj", "{AD9E5616-0963-496A-9851-E2C3F8A2FA1F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Synnotech.EntityFrameworkCore.Tests", "Synnotech.EntityFrameworkCore.Tests\Synnotech.EntityFrameworkCore.Tests.csproj", "{08F12C5D-DE8E-4B77-A7AA-E7FB956F5A11}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{8448BA3F-2AD0-439F-A6B7-D787EF79662C}"
+	ProjectSection(SolutionItems) = preProject
+		Directory.Build.props = Directory.Build.props
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{78F7B45C-7FC0-4C6D-AE90-8935B625706E}"
+	ProjectSection(SolutionItems) = preProject
+		src\Directory.Build.props = src\Directory.Build.props
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{56AFDE76-66F2-48DD-9D33-1A585D700B9A}"
+	ProjectSection(SolutionItems) = preProject
+		tests\Directory.Build.props = tests\Directory.Build.props
+	EndProjectSection
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Synnotech.EntityFrameworkCore.Tests", "tests\Synnotech.EntityFrameworkCore.Tests\Synnotech.EntityFrameworkCore.Tests.csproj", "{263FBBE0-9A91-4A8B-B0B7-F43CA7397CB5}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{AD9E5616-0963-496A-9851-E2C3F8A2FA1F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AD9E5616-0963-496A-9851-E2C3F8A2FA1F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AD9E5616-0963-496A-9851-E2C3F8A2FA1F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AD9E5616-0963-496A-9851-E2C3F8A2FA1F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{263FBBE0-9A91-4A8B-B0B7-F43CA7397CB5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{263FBBE0-9A91-4A8B-B0B7-F43CA7397CB5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{263FBBE0-9A91-4A8B-B0B7-F43CA7397CB5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{263FBBE0-9A91-4A8B-B0B7-F43CA7397CB5}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
-	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{88B7D311-FAB9-4532-BB5C-14A7C9610124}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{88B7D311-FAB9-4532-BB5C-14A7C9610124}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{88B7D311-FAB9-4532-BB5C-14A7C9610124}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{88B7D311-FAB9-4532-BB5C-14A7C9610124}.Release|Any CPU.Build.0 = Release|Any CPU
-		{08F12C5D-DE8E-4B77-A7AA-E7FB956F5A11}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{08F12C5D-DE8E-4B77-A7AA-E7FB956F5A11}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{08F12C5D-DE8E-4B77-A7AA-E7FB956F5A11}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{08F12C5D-DE8E-4B77-A7AA-E7FB956F5A11}.Release|Any CPU.Build.0 = Release|Any CPU
+	GlobalSection(NestedProjects) = preSolution
+		{AD9E5616-0963-496A-9851-E2C3F8A2FA1F} = {78F7B45C-7FC0-4C6D-AE90-8935B625706E}
+		{263FBBE0-9A91-4A8B-B0B7-F43CA7397CB5} = {56AFDE76-66F2-48DD-9D33-1A585D700B9A}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {B44D66A4-F531-4F8E-8954-A346AF03A820}
 	EndGlobalSection
 EndGlobal

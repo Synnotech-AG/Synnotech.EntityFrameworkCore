@@ -1,0 +1,8 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <ItemGroup>
+        <ProjectReference Include="../../src/Synnotech.EntityFrameworkCore/Synnotech.EntityFrameworkCore.csproj" />
+        <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="5.0.10" />
+    </ItemGroup>
+
+</Project>
