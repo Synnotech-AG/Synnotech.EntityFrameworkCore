@@ -1,0 +1,28 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30114.105
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Synnotech.EntityFrameworkCore", "Synnotech.EntityFrameworkCore\Synnotech.EntityFrameworkCore.csproj", "{88B7D311-FAB9-4532-BB5C-14A7C9610124}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Synnotech.EntityFrameworkCore.Tests", "Synnotech.EntityFrameworkCore.Tests\Synnotech.EntityFrameworkCore.Tests.csproj", "{08F12C5D-DE8E-4B77-A7AA-E7FB956F5A11}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{88B7D311-FAB9-4532-BB5C-14A7C9610124}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{88B7D311-FAB9-4532-BB5C-14A7C9610124}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{88B7D311-FAB9-4532-BB5C-14A7C9610124}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{88B7D311-FAB9-4532-BB5C-14A7C9610124}.Release|Any CPU.Build.0 = Release|Any CPU
+		{08F12C5D-DE8E-4B77-A7AA-E7FB956F5A11}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{08F12C5D-DE8E-4B77-A7AA-E7FB956F5A11}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{08F12C5D-DE8E-4B77-A7AA-E7FB956F5A11}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{08F12C5D-DE8E-4B77-A7AA-E7FB956F5A11}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal
