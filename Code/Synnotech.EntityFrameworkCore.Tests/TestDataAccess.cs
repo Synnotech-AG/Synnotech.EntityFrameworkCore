@@ -38,7 +38,7 @@ namespace Synnotech.EntityFrameworkCore.Tests
             return base.DisposeAsync();
         }
 
-        public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = new CancellationToken())
+        public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
         {
             SaveChangesCallCount++;
             return base.SaveChangesAsync(cancellationToken);
@@ -53,12 +53,6 @@ namespace Synnotech.EntityFrameworkCore.Tests
         public TestContext SaveChangesMustHaveBeenCalled()
         {
             SaveChangesCallCount.Should().Be(1);
-            return this;
-        }
-
-        public TestContext SaveChangesMustNotHaveBeenCalled()
-        {
-            SaveChangesCallCount.Should().Be(0);
             return this;
         }
 
