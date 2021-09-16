@@ -22,6 +22,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{56AFDE76
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Synnotech.EntityFrameworkCore.Tests", "tests\Synnotech.EntityFrameworkCore.Tests\Synnotech.EntityFrameworkCore.Tests.csproj", "{263FBBE0-9A91-4A8B-B0B7-F43CA7397CB5}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Synnotech.EntityFrameworkCore.MsSqlServer", "src\Synnotech.EntityFrameworkCore.MsSqlServer\Synnotech.EntityFrameworkCore.MsSqlServer.csproj", "{7EF97574-A1FC-45CE-8529-04A15A6377AB}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -36,6 +38,10 @@ Global
 		{263FBBE0-9A91-4A8B-B0B7-F43CA7397CB5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{263FBBE0-9A91-4A8B-B0B7-F43CA7397CB5}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{263FBBE0-9A91-4A8B-B0B7-F43CA7397CB5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7EF97574-A1FC-45CE-8529-04A15A6377AB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7EF97574-A1FC-45CE-8529-04A15A6377AB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7EF97574-A1FC-45CE-8529-04A15A6377AB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7EF97574-A1FC-45CE-8529-04A15A6377AB}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -43,6 +49,7 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{AD9E5616-0963-496A-9851-E2C3F8A2FA1F} = {78F7B45C-7FC0-4C6D-AE90-8935B625706E}
 		{263FBBE0-9A91-4A8B-B0B7-F43CA7397CB5} = {56AFDE76-66F2-48DD-9D33-1A585D700B9A}
+		{7EF97574-A1FC-45CE-8529-04A15A6377AB} = {78F7B45C-7FC0-4C6D-AE90-8935B625706E}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {B44D66A4-F531-4F8E-8954-A346AF03A820}
