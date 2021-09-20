@@ -1,4 +1,16 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
+    
+    <PropertyGroup>
+        <Description>Implements Synnotech.DatabaseAbstractions for Entity Framework Core</Description>
+        <PackageReleaseNotes>
+Synnotech.EntityFrameworkCore 1.0.0
+-----------------------------------
+
+- Initial release
+- Implements Synnotech.DataAbstractions 3.0.0 for Entity Framework Core
+- see the full docs at https://github.com/Synnotech-AG/Synnotech.EntityFrameworkCore
+        </PackageReleaseNotes>
+    </PropertyGroup>
 
     <ItemGroup>
         <PackageReference Include="Microsoft.EntityFrameworkCore" Version="5.0.10" Condition="'$(TargetFramework)' == 'netstandard2.1'" />

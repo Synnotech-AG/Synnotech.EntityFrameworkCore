@@ -1,4 +1,16 @@
 <Project Sdk="Microsoft.NET.Sdk">
+    
+    <PropertyGroup>
+        <Description>Provides composition root extensions for Synnotech.EntityFrameworkCore used in combination with MS SQL Server.</Description>
+        <PackageReleaseNotes>
+Synnotech.EntityFrameworkCore.MsSqlServer
+-----------------------------------------
+
+- Initial release
+- see the full docs at https://github.com/Synnotech-AG/Synnotech.EntityFrameworkCore/tree/main/Code/src/Synnotech.EntityFrameworkCore.MsSqlServer
+        </PackageReleaseNotes>
+    </PropertyGroup>
+    
     <ItemGroup>
         <ProjectReference Include="..\Synnotech.EntityFrameworkCore\Synnotech.EntityFrameworkCore.csproj" />
         <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="5.0.10" Condition="'$(TargetFramework)' == 'netstandard2.1'" />
