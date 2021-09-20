@@ -217,10 +217,10 @@ public sealed class UpdateAllProductsJob
         {
             try
             {
-                var products = session.GetProductBatchAsync(skip, batchSize);
+                var products = await session.GetProductBatchAsync(skip, batchSize);
                 foreach (var product in products)
                 {
-                    if (product.TryPerformDailyUpdate(Logger))
+                    product.TryPerformDailyUpdate(Logger);
                 }
 
                 await session.SaveChangesAsync();
@@ -250,6 +250,41 @@ services.AddSession<IUpdateProductsSession, EfUpdateProductsSession>();
 ```
 
 *Please note*: while there is an implementation of `IAsyncTransactionalSession` in this package, we do not recommend using it. The pattern above is easier to maintain and better follows the recommendations of Entity Framework Core.
+
+# Non-Tracked Set
+
+By default, EF Core enables change tracking when querying data. This means that for every entity in the result set, a copy will be created that is used to determine which changes need to be made (especially for updates).
+
+This change tracking mechanism comes with an overhead. If you know in advance that you will not update the resulting graph, then you can disable change tracking by using the `NonTrackedSet` extension method.
+
+```csharp
+public sealed class MySession : AsyncSession<DatabaseContext>, IMySession
+{
+    public MySession(DatabaseContext context) : base(context) { }
+
+    public Task<List<Contact>> LoadContactsAsync() =>
+        Context.NonTrackedSet<Contact>() // This will disable change tracking
+               .ToListAsync();
+}
+```
+
+You could do the same thing by calling `AsNoTrackingWithIdentityResolution` or `AsNoTracking`:
+
+```csharp
+public sealed class MySession : AsyncSession<DatabaseContext>, IMySession
+{
+    public MySession(DatabaseContext context) : base(context) { }
+
+    public Task<List<Contact>> LoadContactsAsync() =>
+        Context.Contacts
+               .AsNoTrackingWithIdentityResolution()
+               .ToListAsync();
+}
+```
+
+As you can see, the `NonTrackedSet` makes your query slightly less obfuscated.
+
+*Please remember*: when you derive from `AsyncReadOnlySession<T>`, change tracking is disabled by default. You do not need to use `NonTrackedSet`, `AsNoTrackingWithIdentityResolution`, or `AsNoTracking` in these circumstances.
 
 # General recommendations
 
