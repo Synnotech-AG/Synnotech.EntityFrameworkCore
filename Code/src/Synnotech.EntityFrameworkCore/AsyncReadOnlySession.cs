@@ -25,8 +25,17 @@ namespace Synnotech.EntityFrameworkCore
         /// Initializes a new instance of <see cref="AsyncReadOnlySession{TDbContext}" />.
         /// </summary>
         /// <param name="context">The EF DbContext used for database access.</param>
+        /// <param name="disableQueryTracking">
+        /// The value indicating whether the query tracking behavior will be set to <see cref="QueryTrackingBehavior.NoTracking" /> (optional).
+        /// The default value is true. Read-only sessions usually do not need change tracking as they will not call SaveChangesAsync.
+        /// </param>
         /// <exception cref="ArgumentNullException">Thrown when <paramref name="context" /> is null.</exception>
-        protected AsyncReadOnlySession(TDbContext context) => Context = context.MustNotBeNull(nameof(context));
+        protected AsyncReadOnlySession(TDbContext context, bool disableQueryTracking = true)
+        {
+            Context = context.MustNotBeNull(nameof(context));
+            if (disableQueryTracking)
+                context.ChangeTracker.QueryTrackingBehavior = QueryTrackingBehavior.NoTracking;
+        }
 
         /// <summary>
         /// Gets the DB context of Entity Framework Core.
@@ -61,7 +70,11 @@ namespace Synnotech.EntityFrameworkCore
         /// Initializes a new instance of <see cref="AsyncReadOnlySession" />.
         /// </summary>
         /// <param name="context">The EF DbContext used for database access.</param>
+        /// <param name="disableQueryTracking">
+        /// The value indicating whether the query tracking behavior will be set to <see cref="QueryTrackingBehavior.NoTracking" /> (optional).
+        /// The default value is true. Read-only sessions usually do not need change tracking as they will not call SaveChangesAsync.
+        /// </param>
         /// <exception cref="ArgumentNullException">Thrown when <paramref name="context" /> is null.</exception>
-        protected AsyncReadOnlySession(DbContext context) : base(context) { }
+        protected AsyncReadOnlySession(DbContext context, bool disableQueryTracking = true) : base(context, disableQueryTracking) { }
     }
 }

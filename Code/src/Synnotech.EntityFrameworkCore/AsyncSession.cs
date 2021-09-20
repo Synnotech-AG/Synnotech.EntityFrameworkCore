@@ -27,7 +27,7 @@ namespace Synnotech.EntityFrameworkCore
         /// </summary>
         /// <param name="context">The EF DbContext used for database access.</param>
         /// <exception cref="ArgumentNullException">Thrown when <paramref name="context" /> is null.</exception>
-        protected AsyncSession(TDbContext context) : base(context) { }
+        protected AsyncSession(TDbContext context) : base(context, false) { }
 
         /// <summary>
         /// Calls SaveChangesAsync on the internal DB context of Entity Framework Core.

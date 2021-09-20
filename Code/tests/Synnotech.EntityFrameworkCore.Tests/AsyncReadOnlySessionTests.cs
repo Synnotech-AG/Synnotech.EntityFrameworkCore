@@ -31,7 +31,7 @@ namespace Synnotech.EntityFrameworkCore.Tests
                 loadedContacts = await session.GetContactsAsync();
             }
 
-            loadedContacts.Should().Equal(contacts);
+            loadedContacts.Should().BeEquivalentTo(contacts);
             context.MustHaveBeenDisposed();
         }
 
