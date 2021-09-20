@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
     
     <PropertyGroup>
-        <Description>Implements Synnotech.DatabaseAbstractions for Entity Framework Core</Description>
+        <Description>Implements Synnotech.DatabaseAbstractions for Entity Framework Core.</Description>
         <PackageReleaseNotes>
 Synnotech.EntityFrameworkCore 1.0.0
 -----------------------------------

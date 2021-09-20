@@ -1,2 +1,259 @@
 # Synnotech.EntityFrameworkCore
-Implements Synnotech.DatabaseAbstracftions for Entity Framework Core
+Implements Synnotech.DatabaseAbstractions for Entity Framework Core.
+
+[![Synnotech Logo](synnotech-large-logo.png)](https://www.synnotech.de/)
+
+[![License](https://img.shields.io/badge/License-MIT-green.svg?style=for-the-badge)](https://github.com/Synnotech-AG/Synnotech.EntityFrameworkCore/blob/main/LICENSE)
+[![NuGet](https://img.shields.io/badge/NuGet-1.0.0-blue.svg?style=for-the-badge)](https://www.nuget.org/packages?q=Synnotech.EntityFrameworkCore/)
+
+# How to install
+
+The Synnotech.EntityFrameworkCore packages are compiled against [.NET Standard 2.0 and 2.1](https://docs.microsoft.com/en-us/dotnet/standard/net-standard) and thus supports all major plattforms like .NET 5, .NET Core, .NET Framework 4.6.1 or newer, Mono, Xamarin, UWP, or Unity. Please note that all platforms that only support .NET Standard 2.0 can only use EF Core up to version 3.1.x because the newer versions target only .NET Standard 2.1.
+
+There are several packages available:
+
+- Synnotech.EntityFrameworkCore implements the abstractions of [Synnotech.DatabaseAbstractions 3.x](https://github.com/synnotech-AG/synnotech.DatabaseAbstractions) in a database-agnostic way.
+- [Synnotech.EntityFrameworkCore.MsSqlServer](https://github.com/Synnotech-AG/Synnotech.EntityFrameworkCore/tree/main/Code/src/Synnotech.EntityFrameworkCore.MsSqlServer) provides `IServiceCollection` composition root features that target Microsoft SQL Server.
+
+We recommend to use a package that targets your specific database server - if there is none for your purpuse, please [create an issue](https://github.com/Synnotech-AG/Synnotech.EntityFrameworkCore/issues) so that we can add it to our code base. Alternatively, you can simply reference Synnotech.EntityFrameworkCore and compose it by yourself.
+
+# Writing custom sessions
+
+When writing code that performs I/O, we usually write custom abstractions, containing a single method for each I/O request. The following sections show you how to design abstractions, implement them, and call them in client code.
+
+## Sessions that only read data
+
+The following code snippets show the example for an ASP.NET Core controller that represents an HTTP GET operation for contacts.
+
+Your I/O abstraction should simply derive from `IAsyncReadOnlySession` and offer the corresponding I/O call to load contacts:
+
+```csharp
+public interface IGetContactsSession : IAsyncReadOnlySession
+{
+    Task<List<Contact>> GetContactsAsync(int skip, int take);
+}
+```
+
+To implement this interface, you should derive from the `AsyncReadOnlySession` class of Synnotech.EntityFrameworkCore:
+
+```csharp
+// DatabaseContext is your custom class deriving from EF Core's DbContext
+public sealed class EfGetContactsSession : AsyncReadOnlySession<DatabaseContext>, IGetContactsSession
+{
+    public EfGetContactsSession(DatabaseContext context) : base(context) { }
+
+    public Task<List<Contact>> GetContactsAsync(int skip, int take) =>
+        Context.Contacts
+               .OrderBy(contact => contact.LastName)
+               .Skip(skip)
+               .Take(take)
+               .ToListAsync();
+}
+```
+
+`AsyncReadOnlySession` implements `IAsyncReadOnlySession`, `IDisposable` and `IAsyncDisposable` for you and provides EF Core's `DbContext` via a protected property (the one that is passed in via constructor injection). This reduces the code you need to write in your session for your specific use case.
+
+You can then consume your session via the abstraction in client code. Check out the following ASP.NET Core controller for example:
+
+```csharp
+[ApiController]
+[Route("api/contacts")]
+public sealed class GetContactsController : ControllerBase
+{
+    public GetContactsController(Func<IGetContactsSession> createSession) =>
+        CreateSession = createSession;
+        
+    private Func<IGetContactsSession> CreateSession { get; }
+    
+    [HttpGet]
+    public async Task<ActionResult<List<ContactDto>>> GetContacts(int skip, int take)
+    {
+        if (this.CheckPagingParametersForErrors(skip, take, out var badResult))
+            return badResult;
+        
+        await using var session = CreateSession();
+        var contacts = await session.GetContactsAsync(skip, take);
+        return ContactDto.FromContacts(contacts); // Or use an object-to-object mapper
+    }
+}
+```
+
+In this example, an `Func<IGetContactsSession>` is injected into the controller. This factory delegate is used to instantiate the session once the parameters are validated. After that, the contacts are retrieved via `await session.GetContactsAsync(skip, take)`, transformed to DTOs and returned from the controller.
+
+For this to work, you must register the session with the DI container:
+
+```csharp
+// This call will perform the following registrations (with the default settings):
+// services.AddTransient<IGetContactsSession, EfGetContactsSession>()>();
+// services.AddSingleton<Func<IGetContactsSession>>(container => container.GetRequiredService<IGetContactsSession>);
+services.AddSession<IGetContactsSession, EfGetContactsSession>();
+```
+
+Please note:
+
+- when you derive from `AsyncReadOnlySession<T>`, change tracking is disabled by default. This is because read-only sessions only read data and return them. You can change this behavior by setting the second constructor parameter `disableQueryTracking` to false.
+- `AddSession` registers the factory delegate `Func<IGetContactsSession` with the DI container by default. We recommend to use a proper DI container like [LightInject](https://github.com/seesharper/LightInject) instead of Microsoft.Extensions.DependencyInjection. LightInject offers [Function Factories](https://www.lightinject.net/#function-factories) for free, so you can set `registerFunc` to false when calling `AddSession`.
+
+## Sessions that use a single transaction
+
+If you want to insert, update or delete data, then you usually want to use a single transaction for your database commands. You can use the `IAsyncSession` interface for these scenarios and implement your custom session by deriving from `AsyncSession`.
+
+The abstraction might look like this:
+
+```csharp
+public interface IUpdateContactSession : IAsyncSession
+{
+    ValueTask<Contact?> GetContactAsync(int id);
+}
+```
+
+The class that implements this interface should derive from `AsyncSession` which provides the same members as `AsyncReadOnlySession` plus a `SaveChangesAsync` method:
+
+```csharp
+// DatabaseContext is your custom class deriving from EF Core's DbContext
+public sealed class EfUpdateContactSession : AsyncSession<DatabaseContext>, IUpdateContactSession
+{
+    public EfUpdateContactSession(DatabaseContext context) : base(context) { }
+
+    public ValueTask<Contact?> GetContactAsync(int id) =>
+        Context.Set<Contact?>().FindAsync(id);
+}
+```
+
+You should register your session with the DI container, the same way as we did it for the read-only session:
+
+```csharp
+services.AddSession<IUpdateContactSession, LinqToDbUpdateContactSession>();
+```
+
+Your controller could then use the factory to open the session asynchronously:
+
+```csharp
+[ApiController]
+[Route("api/contacts/update")]
+public sealed class UpdateContactController : ControllerBase
+{
+    public UpdateContactController(Func<IUpdateContactSession> createSession,
+                                   ContactValidator validator)
+    {
+        CreateSession = createSession;
+        Validator = validator;
+    }
+    
+    private Func<IUpdateContactSession> CreateSession { get; }
+    private ContactValidator Validator { get; }
+    
+    [HttpPut]
+    public async Task<IActionResult> UpdateContact(ContactDto contactDto)
+    {
+        if (this.CheckForErrors(contactDto, Validator, out var badResult))
+            return badResult;
+            
+        await using var session = CreateSession();
+        var contact = await session.GetContactAsync(contactDto.Id);
+        if (contact == null)
+            return NotFound();
+        contactDto.UpdateContact(contact); // Or use an object-to-object mapper
+        await session.SaveChangesAsync(); // Changes are saved via EF Core's change tracking mechanism
+        return NoContent();
+    }
+}
+```
+
+*Please note:* Synnotech.EntityFrameworkCore also supports scenarios when the session is registered with a scoped lifetime (the session is then only initialized once per request and disposed by the DI container at the end of the request). However, we recommend that you use a transient lifetime as we argue that it is the controller's responsibility to begin and end the database session. This way, you can more easily test the whole controller without spinning up the ASP.NET Core runtime in your tests.
+
+## Sessions that use multiple transactions
+
+If you need to handle transactions individually, (e.g. because you want to handle a large amount of data in batches and have a transaction per batch), we recommend that you create a session per batch:
+
+```csharp
+public interface IUpdateProductsSession : IAsyncSession
+{
+    Task<int> GetProductCountAsync();
+
+    Task<List<Product>> GetProductBatchAsync(int skip, int take);
+}
+```
+
+The implementation of this session could look like this:
+
+```csharp
+public sealed class EfUpdateProductsSession : AsyncSession<DatabaseContext>, IUpdateProductsSession
+{
+    public EfUpdateProductsSession(DatabaseContext context) : base(context) { }
+
+    public Task<int> GetProductsCountAsync() => Context.Products.CountAsync();
+
+    public Task<List<Product>> GetProductBatchAsync(int skip, int take) =>
+        Context.Products
+               .OrderBy(product => product.Id)
+               .Skip(skip)
+               .Take(take)
+               .ToListAsync();
+}
+```
+
+Your job that updates all products might look like this:
+
+```csharp
+public sealed class UpdateAllProductsJob
+{
+    public UpdateAllProductsJob(Func<IUpdateProductsSession> createSession, ILogger logger)
+    {
+        CreateSession = createSession;
+        Logger = logger;
+    }
+    
+    private Func<IUpdateProductsSession> CreateSession { get; }
+    private ILogger Logger { get; }
+
+    public async Task UpdateProductsAsync()
+    {
+        var session = CreateSession();
+        var numberOfProducts = await session.GetProductsCountAsync();
+        const int batchSize = 100;
+        var skip = 0;
+        while (skip < numberOfProducts)
+        {
+            try
+            {
+                var products = session.GetProductBatchAsync(skip, batchSize);
+                foreach (var product in products)
+                {
+                    if (product.TryPerformDailyUpdate(Logger))
+                }
+
+                await session.SaveChangesAsync();
+            }
+            catch (Exception exception)
+            {
+                Logger.Error(exception, "Batch {From} to {To} could not be updated properly", skip + 1, batchSize + skip);
+            }
+            finally
+            {
+                await session.DisposeAsync();
+            }
+
+            skip += batchSize;
+            session = CreateSession();
+        }
+    }
+}
+```
+
+In the example above, the job get an `Func<IUpdateProductsSession>` that can be used to create a session. In `UpdateProductsAsync`, the session is created and the number of products is determined. The products are then updated in batches with size 100. After each batch, a new session (and therefor) is started and committed at the end. The transaction is disposed in the finally block before a new batch begins.
+
+For this to work, you must register the session with the DI container:
+
+```csharp
+services.AddSession<IUpdateProductsSession, EfUpdateProductsSession>();
+```
+
+*Please note*: while there is an implementation of `IAsyncTransactionalSession` in this package, we do not recommend using it. The pattern above is easier to maintain and better follows the recommendations of Entity Framework Core.
+
+# General recommendations
+
+1. All I/O should be abstracted. You should create abstractions that are specific for your use cases.
+2. Your custom abstractions should derive from `IAsyncReadOnlySession` (when they only read data) or from `IAsyncSession` (when they also manipulate data and therefore need a transaction). Only use `IAsyncTransactionalSession` when you need to handle several transactions within a single session.
+3. Prefer async I/O over sync I/O. Threads that wait for a database query to complete can handle other requests in the meantime when the query is performed asynchronously. This prevents thread starvation under high load and allows your web service to scale better. Synnotech.EntityFrameworkCore currently does not support synchronous sessions for this reason.
+4. In case of web apps, we do not recommend using the DI container to dispose of the session. Instead, it is the controller's responsibility to do that. This way you can easily test the controller without running the whole ASP.NET Core infrastructure in your tests. To make your life easier, use an appropriate DI container like [LightInject](https://github.com/seesharper/LightInject) instead of Microsoft.Extensions.DependencyInjection. These more sophisticated DI containers provide you with more features, e.g. [Function Factories](https://www.lightinject.net/#function-factories).
