@@ -1,0 +1,27 @@
+name: Build and Test
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: 5.0.x
+    - name: Restore dependencies
+      run: dotnet restore ./Code/Synnotech.EntityFrameworkCore.sln
+    - name: Build
+      run: dotnet build ./Code/Synnotech.EntityFrameworkCore.sln --no-restore -c Release
+    - name: Test Core Project
+      run: dotnet test ./Code/tests/Synnotech.EntityFrameworkCore.Tests/Synnotech.EntityFrameworkCore.Tests.csproj -c Release --no-build --verbosity normal
+    - name: Test MS SQL Server
+      run: dotnet test ./Code/tests/Synnotech.EntityFrameworkCore.MsSqlServer.Tests/Synnotech.EntityFrameworkCore.MsSqlServer.Tests.csproj -c Release --no-build --verbosity normal
