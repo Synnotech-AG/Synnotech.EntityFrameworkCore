@@ -47,24 +47,4 @@ namespace Synnotech.EntityFrameworkCore
             return new AsyncEfTransaction(transaction);
         }
     }
-
-    /// <summary>
-    /// <para>
-    /// Represents an asynchronous session via an Entity Framework Core <see cref="DbContext" />. This session
-    /// is able to start and commit several transactions individually by calling BeginTransactionAsync.
-    /// </para>
-    /// <para>
-    /// Beware: you must not derive from this class and introduce other references to disposable objects.
-    /// Only the Context will be disposed.
-    /// </para>
-    /// </summary>
-    public abstract class AsyncTransactionalSession : AsyncTransactionalSession<DbContext>
-    {
-        /// <summary>
-        /// Initializes a new instance of <see cref="AsyncTransactionalSession" />.
-        /// </summary>
-        /// <param name="context">The EF DbContext used for database access.</param>
-        /// <exception cref="ArgumentNullException">Thrown when <paramref name="context" /> is null.</exception>
-        protected AsyncTransactionalSession(DbContext context) : base(context) { }
-    }
 }
