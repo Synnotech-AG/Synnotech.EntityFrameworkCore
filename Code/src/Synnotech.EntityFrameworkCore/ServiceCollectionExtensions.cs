@@ -4,6 +4,7 @@ using Light.GuardClauses.Exceptions;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Synnotech.DatabaseAbstractions;
 
 namespace Synnotech.EntityFrameworkCore
 {
@@ -58,6 +59,36 @@ namespace Synnotech.EntityFrameworkCore
                 builder.EnableSensitiveDataLogging();
 
             return builder;
+        }
+
+        /// <summary>
+        /// Registers a session with the DI container and a Func&lt;TAbstract&gt; factory delegate that can be used to
+        /// resolve the session.
+        /// </summary>
+        /// <typeparam name="TAbstraction">The session abstraction.</typeparam>
+        /// <typeparam name="TImplementation">The session implementation.</typeparam>
+        /// <param name="services">The collection that holds all registrations for the DI container.</param>
+        /// <param name="lifetime">
+        /// The lifetime of the session (optional). The default value is <see cref="ServiceLifetime.Transient"/>,
+        /// i.e. callers must dispose the session by themselves.
+        /// </param>
+        /// <param name="registerFunc">
+        /// The value indicating whether the factory delegate should be registered (optional). The default value
+        /// is true. You can set this value to false if your DI container supports this automatically, e.g.
+        /// LightInject supports Function Factories.
+        /// </param>
+        /// <exception cref="ArgumentNullException">Thrown when <paramref name="services"/> is null.</exception>
+        public static IServiceCollection AddSession<TAbstraction, TImplementation>(this IServiceCollection services,
+                                                                                   ServiceLifetime lifetime = ServiceLifetime.Transient,
+                                                                                   bool registerFunc = true)
+            where TAbstraction : class, IAsyncReadOnlySession
+            where TImplementation : class, TAbstraction
+        {
+            services.MustNotBeNull(nameof(services));
+            services.Add(new ServiceDescriptor(typeof(TAbstraction), typeof(TImplementation), lifetime));
+            if (registerFunc)
+                services.AddSingleton<Func<TAbstraction>>(container => container.GetRequiredService<TAbstraction>);
+            return services;
         }
     }
 }

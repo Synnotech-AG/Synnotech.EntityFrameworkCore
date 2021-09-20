@@ -1,0 +1,24 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+    <ItemGroup>
+      <None Remove="ExampleDatabase.sql" />
+    </ItemGroup>
+    <ItemGroup>
+      <EmbeddedResource Include="ExampleDatabase.sql" />
+    </ItemGroup>
+    <ItemGroup>
+        <ProjectReference Include="..\..\src\Synnotech.EntityFrameworkCore.MsSqlServer\Synnotech.EntityFrameworkCore.MsSqlServer.csproj" />
+        <PackageReference Include="Synnotech.Xunit" Version="1.1.0" />
+        <PackageReference Include="Synnotech.MsSqlServer" Version="1.1.0" />
+        <PackageReference Include="Xunit.SkippableFact" Version="1.4.13" />
+        <PackageReference Include="Light.EmbeddedResources" Version="1.1.0" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <None Update="testsettings.json">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </None>
+        <None Update="testsettings.Development.json" Condition="Exists('testsettings.Development.json')">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </None>
+    </ItemGroup>
+</Project>

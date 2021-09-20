@@ -10,19 +10,23 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		Directory.Build.props = Directory.Build.props
 	EndProjectSection
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{78F7B45C-7FC0-4C6D-AE90-8935B625706E}"
-	ProjectSection(SolutionItems) = preProject
-		src\Directory.Build.props = src\Directory.Build.props
-	EndProjectSection
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{56AFDE76-66F2-48DD-9D33-1A585D700B9A}"
-	ProjectSection(SolutionItems) = preProject
-		tests\Directory.Build.props = tests\Directory.Build.props
-	EndProjectSection
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "MS SQL Server", "MS SQL Server", "{78F7B45C-7FC0-4C6D-AE90-8935B625706E}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Synnotech.EntityFrameworkCore.Tests", "tests\Synnotech.EntityFrameworkCore.Tests\Synnotech.EntityFrameworkCore.Tests.csproj", "{263FBBE0-9A91-4A8B-B0B7-F43CA7397CB5}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Synnotech.EntityFrameworkCore.MsSqlServer", "src\Synnotech.EntityFrameworkCore.MsSqlServer\Synnotech.EntityFrameworkCore.MsSqlServer.csproj", "{7EF97574-A1FC-45CE-8529-04A15A6377AB}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{27899606-1250-4FFF-B34B-038EE7C52211}"
+	ProjectSection(SolutionItems) = preProject
+		src\Directory.Build.props = src\Directory.Build.props
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{B472C6F4-0928-4EDC-A6B2-3588B19027AD}"
+	ProjectSection(SolutionItems) = preProject
+		tests\Directory.Build.props = tests\Directory.Build.props
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Synnotech.EntityFrameworkCore.MsSqlServer.Tests", "tests\Synnotech.EntityFrameworkCore.MsSqlServer.Tests\Synnotech.EntityFrameworkCore.MsSqlServer.Tests.csproj", "{ECC32DB2-722F-4B29-9255-ED06C5CB87BC}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -42,14 +46,19 @@ Global
 		{7EF97574-A1FC-45CE-8529-04A15A6377AB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7EF97574-A1FC-45CE-8529-04A15A6377AB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7EF97574-A1FC-45CE-8529-04A15A6377AB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{ECC32DB2-722F-4B29-9255-ED06C5CB87BC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{ECC32DB2-722F-4B29-9255-ED06C5CB87BC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{ECC32DB2-722F-4B29-9255-ED06C5CB87BC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{ECC32DB2-722F-4B29-9255-ED06C5CB87BC}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
-		{AD9E5616-0963-496A-9851-E2C3F8A2FA1F} = {78F7B45C-7FC0-4C6D-AE90-8935B625706E}
-		{263FBBE0-9A91-4A8B-B0B7-F43CA7397CB5} = {56AFDE76-66F2-48DD-9D33-1A585D700B9A}
 		{7EF97574-A1FC-45CE-8529-04A15A6377AB} = {78F7B45C-7FC0-4C6D-AE90-8935B625706E}
+		{27899606-1250-4FFF-B34B-038EE7C52211} = {8448BA3F-2AD0-439F-A6B7-D787EF79662C}
+		{B472C6F4-0928-4EDC-A6B2-3588B19027AD} = {8448BA3F-2AD0-439F-A6B7-D787EF79662C}
+		{ECC32DB2-722F-4B29-9255-ED06C5CB87BC} = {78F7B45C-7FC0-4C6D-AE90-8935B625706E}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {B44D66A4-F531-4F8E-8954-A346AF03A820}
