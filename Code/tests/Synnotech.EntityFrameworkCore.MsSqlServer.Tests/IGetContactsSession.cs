@@ -14,6 +14,6 @@ namespace Synnotech.EntityFrameworkCore.MsSqlServer.Tests
     {
         public EfGetContactsSession(DatabaseContext context) : base(context) { }
 
-        public Task<List<Contact>> GetContactsAsync() => Context.Contacts.ToListAsync();
+        public Task<List<Contact>> GetContactsAsync() => Context.NonTrackedSet<Contact>().ToListAsync();
     }
 }
