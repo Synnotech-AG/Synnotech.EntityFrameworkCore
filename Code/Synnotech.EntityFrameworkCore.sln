@@ -7,7 +7,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Synnotech.EntityFrameworkCo
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{8448BA3F-2AD0-439F-A6B7-D787EF79662C}"
 	ProjectSection(SolutionItems) = preProject
+		CreateNuGetPackages.cmd = CreateNuGetPackages.cmd
 		Directory.Build.props = Directory.Build.props
+		Synnotech.EntityFrameworkCore.Public.snk = Synnotech.EntityFrameworkCore.Public.snk
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "MS SQL Server", "MS SQL Server", "{78F7B45C-7FC0-4C6D-AE90-8935B625706E}"
@@ -26,7 +28,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{B472C6F4
 		tests\Directory.Build.props = tests\Directory.Build.props
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Synnotech.EntityFrameworkCore.MsSqlServer.Tests", "tests\Synnotech.EntityFrameworkCore.MsSqlServer.Tests\Synnotech.EntityFrameworkCore.MsSqlServer.Tests.csproj", "{ECC32DB2-722F-4B29-9255-ED06C5CB87BC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Synnotech.EntityFrameworkCore.MsSqlServer.Tests", "tests\Synnotech.EntityFrameworkCore.MsSqlServer.Tests\Synnotech.EntityFrameworkCore.MsSqlServer.Tests.csproj", "{ECC32DB2-722F-4B29-9255-ED06C5CB87BC}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

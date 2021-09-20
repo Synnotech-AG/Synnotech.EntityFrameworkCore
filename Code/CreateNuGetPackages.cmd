@@ -1,0 +1,1 @@
+dotnet pack --configuration Release /p:SignAssembly=true /p:AssemblyOriginatorKeyFile=../../Synnotech.EntityFrameworkCore.snk /p:ContinuousIntegrationBuild=true
