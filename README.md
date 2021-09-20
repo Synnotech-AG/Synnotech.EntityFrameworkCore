@@ -34,7 +34,7 @@ public interface IGetContactsSession : IAsyncReadOnlySession
 }
 ```
 
-To implement this interface, you should derive from the `AsyncReadOnlySession` class of Synnotech.EntityFrameworkCore:
+To implement this interface, you should derive from the `AsyncReadOnlySession<T>` class of Synnotech.EntityFrameworkCore:
 
 ```csharp
 // DatabaseContext is your custom class deriving from EF Core's DbContext
@@ -51,7 +51,7 @@ public sealed class EfGetContactsSession : AsyncReadOnlySession<DatabaseContext>
 }
 ```
 
-`AsyncReadOnlySession` implements `IAsyncReadOnlySession`, `IDisposable` and `IAsyncDisposable` for you and provides EF Core's `DbContext` via a protected property (the one that is passed in via constructor injection). This reduces the code you need to write in your session for your specific use case.
+`AsyncReadOnlySession<T>` implements `IAsyncReadOnlySession`, `IDisposable` and `IAsyncDisposable` for you and provides EF Core's `DbContext` via a protected property (the one that is passed in via constructor injection). This reduces the code you need to write in your session for your specific use case.
 
 You can then consume your session via the abstraction in client code. Check out the following ASP.NET Core controller for example:
 
@@ -96,7 +96,7 @@ Please note:
 
 ## Sessions that use a single transaction
 
-If you want to insert, update or delete data, then you usually want to use a single transaction for your database commands. You can use the `IAsyncSession` interface for these scenarios and implement your custom session by deriving from `AsyncSession`.
+If you want to insert, update or delete data, then you usually want to use a single transaction for your database commands. You can use the `IAsyncSession` interface for these scenarios and implement your custom session by deriving from `AsyncSession<T>`.
 
 The abstraction might look like this:
 
@@ -107,7 +107,7 @@ public interface IUpdateContactSession : IAsyncSession
 }
 ```
 
-The class that implements this interface should derive from `AsyncSession` which provides the same members as `AsyncReadOnlySession` plus a `SaveChangesAsync` method:
+The class that implements this interface should derive from `AsyncSession<T>` which provides the same members as `AsyncReadOnlySession<T>` plus a `SaveChangesAsync` method:
 
 ```csharp
 // DatabaseContext is your custom class deriving from EF Core's DbContext
@@ -289,6 +289,6 @@ As you can see, the `NonTrackedSet` makes your query slightly less obfuscated.
 # General recommendations
 
 1. All I/O should be abstracted. You should create abstractions that are specific for your use cases.
-2. Your custom abstractions should derive from `IAsyncReadOnlySession` (when they only read data) or from `IAsyncSession` (when they also manipulate data and therefore need a transaction). Only use `IAsyncTransactionalSession` when you need to handle several transactions within a single session.
+2. Your custom abstractions should derive from `IAsyncReadOnlySession` (when they only read data) or from `IAsyncSession` (when they also manipulate data and therefore need a transaction and change tracking).
 3. Prefer async I/O over sync I/O. Threads that wait for a database query to complete can handle other requests in the meantime when the query is performed asynchronously. This prevents thread starvation under high load and allows your web service to scale better. Synnotech.EntityFrameworkCore currently does not support synchronous sessions for this reason.
 4. In case of web apps, we do not recommend using the DI container to dispose of the session. Instead, it is the controller's responsibility to do that. This way you can easily test the controller without running the whole ASP.NET Core infrastructure in your tests. To make your life easier, use an appropriate DI container like [LightInject](https://github.com/seesharper/LightInject) instead of Microsoft.Extensions.DependencyInjection. These more sophisticated DI containers provide you with more features, e.g. [Function Factories](https://www.lightinject.net/#function-factories).
