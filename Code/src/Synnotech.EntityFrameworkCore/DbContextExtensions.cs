@@ -18,12 +18,11 @@ namespace Synnotech.EntityFrameworkCore
         /// <param name="context">The context that the query is performed upon.</param>
         /// <param name="withIdentityResolution">
         /// The value indicating whether EF Core's Identity Resolution algorithm should be enabled or not (optional).
-        /// The default value is false. You should only set this value to true when one entity is referenced by several
-        /// other entities (usually from different tables). If this value is set to true, EF Core will only instantiate
+        /// The default value is true. If this value is set to true, EF Core will only instantiate
         /// one entity and reference it in all other entities, instead of instantiating it multiple times (one per reference).
         /// </param>
         /// <exception cref="ArgumentNullException">Thrown when <paramref name="context"/> is null.</exception>
-        public static IQueryable<T> NonTrackedSet<T>(this DbContext context, bool withIdentityResolution = false)
+        public static IQueryable<T> NonTrackedSet<T>(this DbContext context, bool withIdentityResolution = true)
             where T : class
         {
             var query = context.MustNotBeNull(nameof(context))
