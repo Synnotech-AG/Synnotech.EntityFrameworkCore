@@ -11,7 +11,7 @@ namespace Synnotech.EntityFrameworkCore
     /// Represents an asynchronous session via an Entity Framework Core <see cref="DbContext" />. This
     /// type of session can be used to read as well as insert, update, or delete data. The session automatically
     /// uses a transaction when calling <see cref="SaveChangesAsync" /> (as implemented in EF Core). If you
-    /// do not call <see cref="SaveChangesAsync" />, your changes will automatically discarded.
+    /// do not call <see cref="SaveChangesAsync" />, your changes will be discarded when the session is disposed.
     /// </para>
     /// <para>
     /// Beware: you must not derive from this class and introduce other references to disposable objects.
