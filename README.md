@@ -123,7 +123,7 @@ public sealed class EfUpdateContactSession : AsyncSession<DatabaseContext>, IUpd
 You should register your session with the DI container, the same way as we did it for the read-only session:
 
 ```csharp
-services.AddSession<IUpdateContactSession, LinqToDbUpdateContactSession>();
+services.AddSession<IUpdateContactSession, EfUpdateContactSession>();
 ```
 
 Your controller could then use the factory to open the session asynchronously:
